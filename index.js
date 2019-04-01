@@ -6,8 +6,6 @@ const registerRoute = require('./routes/registerRoute.js');
 const loginRoute = require('./routes/loginRoute.js');
 const usersRoute = require('./routes/usersRoute.js');
 
-// const db = require('./database/dbConfig.js');
-
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
