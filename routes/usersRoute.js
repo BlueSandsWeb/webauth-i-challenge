@@ -6,26 +6,22 @@ const db = require('../database/dbConfig.js');
 
 router.get('/', lockdown, async (req, res) => {
   try {
-    const users = await db('users').select('id', 'username','password');
-    res.status(200).json({users});
+    const users = await db('users').select('id', 'username', 'password');
+    res.status(200).json({ users });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error"});
+    res.status(500).json({ message: "Internal server error" });
   }
 })
 
-async function lockdown (req, res, next) {
-  console.log(`lockdown running`);
-  const {username, password } = req.headers;
-  if(username && password) {
-    const user = await db('users').where({username}).first();
-    console.log(bcrypt.compareSync(password, user.password));
-    if(bcrypt.compareSync(password, user.password)){
+async function lockdown(req, res, next) {
+  try {
+    if (req.session && req.session.user) {
       next();
     } else {
-      res.status(403).json({message: "UNAUTHORIZED, WE HAVE NOTIFIED THE FBI"});
+      res.status(401).json({ message: "Invalid Credentials" });
     }
-  } else {
-    res.status(401).json({ message: "Please login"});
+  } catch (error) {
+    res.status(500).json({ message: "It's broken :(" });
   }
 }
 
