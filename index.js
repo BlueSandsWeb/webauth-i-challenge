@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const helmet = require('helmet');
 const cors = require('cors');
+require('dotenv').config();
 
 const registerRoute = require('./routes/registerRoute.js');
 const loginRoute = require('./routes/loginRoute.js');
@@ -13,7 +14,7 @@ const knexSessionStore = require('connect-session-knex')(session);
 
 const sessionConfig = { // see more at www.npmjs.com/package/express-session
   name: 'authChallenge',
-  secret: 'To give anything less than your best is to sacrifice the gift',
+  secret: process.env.SECRET,
   cookie: {
     maxAge: 1000 * 60 * 30, // in miliseconds
     secure: false, // use cookie over https.  This should be true if in production!!!!! set this in the .env
